@@ -11,6 +11,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat;
 use function array_keys;
+use function date_diff;
 use function strtolower;
 
 /**
@@ -219,33 +220,12 @@ class PlayedTimeManager
         $session = $this->getSessionTime($player);
         if ($total === null) return $session;
 
-        $total->f += $session->f;
-        $total->s += $session->s;
-        $total->i += $session->i;
-        $total->h += $session->h;
-        $total->d += $session->d;
-        $total->m += $session->m;
-        $total->y += $session->y;
-        if (($total->s / 60) >= 1) {
-            $total->i += ($total->s / 60);
-            $total->s = $total->s - ($total->i * 60);
-        }
-        if (($total->i / 60) >= 1) {
-            $total->h += ($total->i / 60);
-            $total->i = $total->i - ($total->h * 60);
-        }
-        if (($total->h / 24) >= 1) {
-            $total->d += ($total->h / 24);
-            $total->h = $total->h - ($total->d * 24);
-        }
-        if (($total->d / 30) >= 1) {
-            $total->m += ($total->d / 30);
-            $total->d = $total->d - ($total->m * 30);
-        }
-        if (($total->m / 12) >= 1) {
-            $total->y += ($total->m / 12);
-            $total->m = $total->m - ($total->y * 12);
-        }
+        $dtNow = (new DateTime('now'))
+        ->add($total)
+        ->add($session);
+        $dtNow2 = new DateTime('now');
+        return $dtNow->diff($dtNow2, true);
+
         return $total;
     }
 
