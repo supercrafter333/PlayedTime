@@ -1,0 +1,26 @@
+# Messages of: PlayedTime (c) 2022 - by supercrafter333
+
+time-format: "{y} years, {m} months, {d} days, {h} hours, {i} minutes, {s} seconds"
+
+help-command:
+  onSuccess: "§7All Commands of PlayedTime:{commands}"
+
+mytime-command:
+  description: "See your played time."
+  onSuccess: "§7Your total played time: §b{total_time}{line}§7Your played time while this session: §b{session_time}"
+
+time-command:
+  description: "See the played time of any player or just your played time."
+  args: "[player]"
+  onFail: "§cCan't find time of {player}!"
+  onSuccess: "§7Total played time of §a{player}§7: §b{time}"
+  onSuccess2: "§7Total played time of §a{player}§7 while this session: §b{time}"
+
+top-command:
+  description: "See the best played times."
+  args: "[int: page]"
+  onFail: "§cCan't find page!"
+  onSuccess: "Showing page §a{page}§r of §b{pages}§r:"
+  onSuccessTemplate: "§b{number}. §6{name} §7=> §e{time}"
+
+only-in-game: "This command can only be used in-game."
