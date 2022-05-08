@@ -98,7 +98,11 @@ class PlayedTimeCommand extends Command implements PluginOwned
         if (!$this->checkPermission($s, $this->getPermission())) return;
 
         if (!isset($args[0])) {
-            $s->sendMessage($this->usageMessage);
+            $cmdArr = ["mytime", "time", "top"];
+            $cmds = "";
+            foreach ($cmdArr as $cmd) {
+                $cmds .= "\n§6/playedtime " . $cmd . " " . ($this->getMsg($cmd . "-command:args") !== "Message not found!" ? $this->getMsg($cmd . "-command:args") : "") . " §r - §b" . $this->getMsg($cmd . "-command:description");
+            }
             return;
         }
 
