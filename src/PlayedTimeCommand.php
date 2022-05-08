@@ -103,6 +103,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
             foreach ($cmdArr as $cmd) {
                 $cmds .= "\n§6/playedtime " . $cmd . " " . ($this->getMsg($cmd . "-command:args") !== "Message not found!" ? $this->getMsg($cmd . "-command:args") : "") . " §r - §b" . $this->getMsg($cmd . "-command:description");
             }
+            $s->sendMessage($this->getMsg("help-command:onSuccess", ["{commands}" => $cmds]));
             return;
         }
 
