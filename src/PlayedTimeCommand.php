@@ -127,6 +127,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
                     $cmds .= "\n§6/playedtime " . $cmd . " " . ($this->getMsg($cmd . "-command:args") !== "Message not found!" ? $this->getMsg($cmd . "-command:args") : "") . " §r - §b" . $this->getMsg($cmd . "-command:description");
                 }
                 $s->sendMessage($this->getMsg("help-command:onSuccess", ["{commands}" => $cmds]));
+
                 break;
 
             case "mytime":
@@ -217,6 +218,16 @@ class PlayedTimeCommand extends Command implements PluginOwned
                     $s->sendMessage($this->getMsg("top-command:onSucccessTemplate",
                         ["{number}" => $number, "{name}" => $name, "{time}" => $timeMsg($this->getOwningPlugin()->getPlayedTimeManager()->getTotalTime($name))]));
                 }
+
+                break;
+
+            default:
+                $cmdArr = ["mytime", "time", "top"];
+                $cmds = "";
+                foreach ($cmdArr as $cmd) {
+                    $cmds .= "\n§6/playedtime " . $cmd . " " . ($this->getMsg($cmd . "-command:args") !== "Message not found!" ? $this->getMsg($cmd . "-command:args") : "") . " §r - §b" . $this->getMsg($cmd . "-command:description");
+                }
+                $s->sendMessage($this->getMsg("help-command:onSuccess", ["{commands}" => $cmds]));
 
                 break;
         }
