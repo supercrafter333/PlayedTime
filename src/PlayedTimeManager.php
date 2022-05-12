@@ -224,9 +224,7 @@ class PlayedTimeManager
         ->add($total)
         ->add($session);
         $dtNow2 = new DateTime('now');
-        return $dtNow->diff($dtNow2, true);
-
-        return $total;
+        return $dtNow2->diff($dtNow, true);
     }
 
     /**
