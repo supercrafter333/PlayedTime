@@ -220,11 +220,9 @@ class PlayedTimeManager
         $session = $this->getSessionTime($player);
         if ($total === null) return $session;
 
-        $dtNow = (new DateTime('now'))
-        ->add($total)
-        ->add($session);
+        $dtNow = (new DateTime('now'))->add($total);
         $dtNow2 = new DateTime('now');
-        return $dtNow2->diff($dtNow, true);
+        return $dtNow->diff($dtNow2->add($session), true);
     }
 
     /**
