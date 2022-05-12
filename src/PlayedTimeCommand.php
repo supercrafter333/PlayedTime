@@ -173,7 +173,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
                     ["{player}" => $name, "{time}" => $timeMsg($this->getOwningPlugin()->getPlayedTimeManager()->getSessionTime($tPlayer))]));
 
                 $s->sendMessage($this->getMsg("time-command:onSuccess",
-                    ["{player}" => $name, "{time}" => $timeMsg($this->getOwningPlugin()->getPlayedTimeManager()->getTotalTime($tPlayer))]));
+                    ["{player}" => $name, "{time}" => $timeMsg($this->getOwningPlugin()->getPlayedTimeManager()->getTotalTime($name))]));
 
                 break;
 
