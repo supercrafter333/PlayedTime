@@ -1,7 +1,7 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/ca6cWPpERp)
-# <img src="https://github.com/supercrafter333/PlayedTime/blob/master/icon.png?raw=true" width="26" float="left" style="border-radius: 0.3rem"> PlayedTime - v0.0.1  [![](https://poggit.pmmp.io/shield.state/PlayedTime)](https://poggit.pmmp.io/p/PlayedTime) [![](https://poggit.pmmp.io/shield.dl.total/PlayedTime)](https://poggit.pmmp.io/p/PlayedTime) [<img src="https://img.shields.io/badge/ScoreHud-PlayedTimeScore-blue?&style=square">](https://poggit.pmmp.io/ci/supercrafter333/ScoreHudX/PlayedTimeScore)
+# <img src="https://github.com/supercrafter333/PlayedTime/blob/master/icon.png?raw=true" width="26" float="left" style="border-radius: 0.3rem"> PlayedTime - v0.0.3  [![](https://poggit.pmmp.io/shield.state/PlayedTime)](https://poggit.pmmp.io/p/PlayedTime) [![](https://poggit.pmmp.io/shield.dl.total/PlayedTime)](https://poggit.pmmp.io/p/PlayedTime) [<img src="https://img.shields.io/badge/ScoreHud-PlayedTimeScore-blue?&style=square">](https://poggit.pmmp.io/ci/supercrafter333/ScoreHudX/PlayedTimeScore)
 
-> **BETA VERSION!**
+> **BETA PM5 VERSION!**
 > 
 > This is a test/beta version of PlayedTime. It can contain bugs and not fully tested things.
 

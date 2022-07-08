@@ -3,6 +3,7 @@
 namespace supercrafter333\PlayedTime;
 
 use DateInterval;
+use Exception;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\lang\KnownTranslationFactory;
@@ -92,6 +93,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
      * @param string $commandLabel
      * @param array $args
      * @return void
+     * @throws Exception
      */
     public function execute(CommandSender $s, string $commandLabel, array $args): void
     {

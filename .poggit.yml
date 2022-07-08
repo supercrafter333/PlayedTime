@@ -2,6 +2,7 @@
 build-by-default: true
 branches:
 - master
+- PM5
 projects:
   PlayedTime:
     path: ""
