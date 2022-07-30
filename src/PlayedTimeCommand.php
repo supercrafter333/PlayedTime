@@ -3,6 +3,7 @@
 namespace supercrafter333\PlayedTime;
 
 use DateInterval;
+use DateTime;
 use Exception;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -11,6 +12,8 @@ use pocketmine\lang\Translatable;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
+use pocketmine\scheduler\AsyncTask;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use function array_keys;
@@ -20,9 +23,12 @@ use function explode;
 use function implode;
 use function is_numeric;
 use function round;
+use function serialize;
 use function sort;
 use function str_contains;
 use function str_replace;
+use function unserialize;
+use function var_dump;
 
 /**
  *
@@ -70,7 +76,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
      * @param bool $allowNewLines
      * @return string
      */
-    private function getMsg(string $msgPrefix, array|null $replace = null, bool $allowNewLines = true): string
+    public function getMsg(string $msgPrefix, array|null $replace = null, bool $allowNewLines = true): string
     {
         $msgCfg = new Config($this->getOwningPlugin()->getDataFolder() . "messages.yml", Config::YAML);
 
@@ -109,7 +115,6 @@ class PlayedTimeCommand extends Command implements PluginOwned
             return;
         }
 
-        $isPlayer = fn(): bool => $s instanceof Player;
         $notAPlayerMsg = fn() => $s->sendMessage($this->getMsg("only-in-game"));
         $timeMsg = fn(DateInterval $time): string => $this->getMsg("time-format", [
             "{y}" => $time->y,
@@ -134,8 +139,8 @@ class PlayedTimeCommand extends Command implements PluginOwned
 
             case "mytime":
             case "mine":
-                if (!$isPlayer) {
-                    $notAPlayerMsg;
+                if (!$s instanceof Player) {
+                    $notAPlayerMsg();
                     return;
                 }
 
@@ -151,8 +156,8 @@ class PlayedTimeCommand extends Command implements PluginOwned
                 if (!$this->checkPermission($s, "playedtime.cmd.time")) return;
 
                 if (!isset($args[0])) {
-                    if (!$isPlayer) {
-                        $notAPlayerMsg;
+                    if (!$s instanceof Player) {
+                        $notAPlayerMsg();
                         return;
                     }
 
@@ -183,44 +188,16 @@ class PlayedTimeCommand extends Command implements PluginOwned
             case "top":
                 if (!$this->checkPermission($s, "playedtime.cmd.top")) return;
 
-                //$s->sendMessage($this->getMsg("time-command:onFail", ["{page}" => (string)$pg]));
-
                 $top = null;
-                $all = $this->getOwningPlugin()->getPlayedTimeManager()->getConfig()->getAll(true);
-                sort($all, SORT_NUMERIC);
-                $pg = (isset($args[0]) && is_numeric($args[0]) && $args[0] > 0) ? $args[0] : 1;
-                $pages = round(count($all) / 10);
+                $all = $this->getOwningPlugin()->getPlayedTimeManager()->getConfig()->getAll();
+                $allTimes = [];
+                foreach ($all as $playerName => $intervalStr)
+                    if (($tt = PlayedTimeManager::getInstance()->getTotalTime($playerName)) instanceof DateInterval)
+                        $allTimes[$playerName] = (new DateTime('now'))->add($tt)->getTimestamp();
 
-                if (!$pg > $pages) {
-
-                    $i = 0;
-                    $finalArr["pg"] = $pg;
-                    $finalArr["pgs"] = $pages;
-                    foreach ($all as $item => $value) { // https://github.com/Zedstar16/OnlineTime/blob/pocketmine-4.0.0/src/Zedstar16/OnlineTime/Main.php#L157-L160
-                        $i++;
-                        if ($i >= 10 * ($pg - 1) && $i <= ((10 * ($pg - 1)) + 10)) {
-                            $finalArr["top"] = [$i => $item];
-                        }
-                    }
-                    $top = $finalArr;
-                }
-
-                if ($top === null) {
-                    $s->sendMessage($this->getMsg("top-command:onFail"));
-                    return;
-                }
-
-                $page = (string)$top["pg"];
-                $pages = (string)$top["pgs"];
-                $top = $top["top"];
-
-                $s->sendMessage($this->getMsg("top-command:onSucccess",
-                    ["{page}" => $page, "{pages}" => $pages]));
-                foreach ($top as $number => $name) {
-                    $s->sendMessage($this->getMsg("top-command:onSucccessTemplate",
-                        ["{number}" => $number, "{name}" => $name, "{time}" => $timeMsg($this->getOwningPlugin()->getPlayedTimeManager()->getTotalTime($name))]));
-                }
-
+                PlayedTimeLoader::getInstance()->getServer()->getAsyncPool()->submitTask(
+                    new TopSortAsyncTask($s->getName(), $allTimes, (isset($args[1]) && is_numeric($args[1]) && $args[1] > 0 ? $args[1] : 1))
+                );
                 break;
 
             default:
