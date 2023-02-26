@@ -7,11 +7,9 @@ use DateTime;
 use Exception;
 use JsonException;
 use pocketmine\player\Player;
-use pocketmine\utils\Config;
-use pocketmine\utils\SingletonTrait;
-use pocketmine\utils\TextFormat;
+use pocketmine\utils\{AssumptionFailedError, Config, SingletonTrait, TextFormat};
 use function array_keys;
-use function date_diff;
+use function print_r;
 use function strtolower;
 
 /**
@@ -64,8 +62,7 @@ class PlayedTimeManager
      */
     public function removePlayerFromCache(Player|string $player): bool
     {
-        $saved = $this->saveFor($player);
-        if (!$saved) return false;
+        if (!$this->saveFor($player)) return false;
 
         $name = $this->cleanName($player);
 
@@ -133,7 +130,11 @@ class PlayedTimeManager
         if (($tt = $this->getTotalTime($player)) === null) return false;
 
         $cfg = $this->getConfig();
-        $cfg->set($name, $this->generateDateIntervalString($tt));
+        try {
+            $cfg->set($name, $this->generateDateIntervalString($tt));
+        } catch (AssumptionFailedError $error) {
+            return false;
+        }
         $cfg->save();
         return true;
     }
@@ -146,9 +147,8 @@ class PlayedTimeManager
      */
     public function saveAll(): void
     {
-        foreach (array_keys(self::$cachedPlayers) as $cachedPlayer) {
+        foreach (array_keys(self::$cachedPlayers) as $cachedPlayer)
             $this->saveFor($cachedPlayer);
-        }
     }
 
 
@@ -186,7 +186,13 @@ class PlayedTimeManager
     {
         $val = $this->getConfig()->get($this->cleanName($player), null);
 
-        return $val === null ? null : new DateInterval($val);
+        try {
+            $dateIntv = new DateInterval($val);
+            return $dateIntv;
+        } catch (Exception $exception) {
+            print_r("Got ERROR: " . $exception->getMessage() . PHP_EOL . " (" . $exception->getCode() . ")");
+            return null;
+        }
     }
 
     /**
@@ -228,6 +234,7 @@ class PlayedTimeManager
     /**
      * @param DateInterval $dateInterval
      * @return string
+     * @throws AssumptionFailedError
      */
     private function generateDateIntervalString(DateInterval $dateInterval): string
     {
@@ -239,6 +246,8 @@ class PlayedTimeManager
         if ($dateInterval->h > 0) $str .= $dateInterval->h . "H";
         if ($dateInterval->i > 0) $str .= $dateInterval->i . "M";
         if ($dateInterval->s > 0) $str .= $dateInterval->s . "S";
+
+        if ($str === "P") throw new AssumptionFailedError("DateInterval cannot be empty!");
 
         return $str;
     }

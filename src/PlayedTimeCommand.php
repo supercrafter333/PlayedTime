@@ -12,23 +12,15 @@ use pocketmine\lang\Translatable;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
-use pocketmine\scheduler\AsyncTask;
-use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use function array_keys;
 use function array_shift;
-use function count;
 use function explode;
 use function implode;
 use function is_numeric;
-use function round;
-use function serialize;
-use function sort;
 use function str_contains;
 use function str_replace;
-use function unserialize;
-use function var_dump;
 
 /**
  *
