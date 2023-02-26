@@ -187,8 +187,7 @@ class PlayedTimeManager
         $val = $this->getConfig()->get($this->cleanName($player), null);
 
         try {
-            $dateIntv = new DateInterval($val);
-            return $dateIntv;
+            return new DateInterval($val);
         } catch (Exception $exception) {
             print_r("Got ERROR: " . $exception->getMessage() . PHP_EOL . " (" . $exception->getCode() . ")");
             return null;
