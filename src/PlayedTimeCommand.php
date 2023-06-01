@@ -22,9 +22,6 @@ use function is_numeric;
 use function str_contains;
 use function str_replace;
 
-/**
- *
- */
 class PlayedTimeCommand extends Command implements PluginOwned
 {
 
@@ -95,7 +92,7 @@ class PlayedTimeCommand extends Command implements PluginOwned
      */
     public function execute(CommandSender $s, string $commandLabel, array $args): void
     {
-        if (!$this->checkPermission($s, $this->getPermission())) return;
+        if (!$this->checkPermission($s, $this->getPermissions()[0])) return;
 
         if (!isset($args[0])) {
             $cmdArr = ["mytime", "time", "top"];

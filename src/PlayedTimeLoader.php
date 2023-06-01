@@ -11,9 +11,7 @@ class PlayedTimeLoader extends PluginBase
     use SingletonTrait;
 
     protected function onLoad(): void
-    {
-        self::setInstance($this);
-    }
+    { self::setInstance($this); }
 
     protected function onEnable(): void
     {

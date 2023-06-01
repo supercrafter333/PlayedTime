@@ -26,7 +26,7 @@ class TopSortAsyncTask extends AsyncTask
      * @param array $times
      * @param int $page
      */
-    public function __construct(private string $player, private array $times, private int $page) {}
+    public function __construct(private readonly string $player, private readonly array $times, private int $page, private int $max = 10) {}
 
     public function onRun(): void
     {
