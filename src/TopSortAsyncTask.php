@@ -17,20 +17,28 @@ use pocketmine\player\Player;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\utils\Config;
+use function serialize;
+use function unserialize;
 
 class TopSortAsyncTask extends AsyncTask
 {
+
+    private readonly string $times;
 
     /**
      * @param string $player
      * @param array $times
      * @param int $page
+     * @param int $max
      */
-    public function __construct(private readonly string $player, private readonly array $times, private int $page, private int $max = 10) {}
+    public function __construct(private readonly string $player, array $times, private int $page, private int $max = 10)
+    {
+        $this->times = serialize($times);
+    }
 
     public function onRun(): void
     {
-        $times = (array)$this->times;
+        $times = (array)unserialize($this->times);
         arsort($times);
 
         $ret = [];
