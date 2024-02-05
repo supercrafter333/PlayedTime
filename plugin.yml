@@ -1,5 +1,5 @@
 name: PlayedTime
-version: 1.0.2
+version: 1.0.3
 api: [4.0.0, 5.0.0]
 main: supercrafter333\PlayedTime\PlayedTimeLoader
 src-namespace-prefix: supercrafter333\PlayedTime

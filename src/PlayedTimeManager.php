@@ -11,6 +11,7 @@ use pocketmine\utils\{AssumptionFailedError, Config, SingletonTrait, TextFormat}
 use function array_keys;
 use function print_r;
 use function strtolower;
+use const PHP_EOL;
 
 /**
  * This class is the manager for all the time stuff. It's the most important file for other developers.
@@ -186,10 +187,12 @@ class PlayedTimeManager
     {
         $val = $this->getConfig()->get($this->cleanName($player), null);
 
+        if ($val === null) return null;
+
         try {
             return new DateInterval($val);
         } catch (Exception $exception) {
-            print_r("Got ERROR: " . $exception->getMessage() . PHP_EOL . " (" . $exception->getCode() . ")");
+            print_r("Got ERROR: " . $exception->getMessage() . " (" . $exception->getCode() . ")" . PHP_EOL . "File(Line): " . $exception->getFile() . " (#{$exception->getLine()})");
             return null;
         }
     }
